@@ -2,21 +2,6 @@
 """Draw the profile README's stat graphics from the GitHub GraphQL API.
 
 No third-party services and no dependencies — standard library only.
-
-Outputs, all sharing one visual language with ascii.svg (the portrait):
-  stats.svg   hero total + weekly sparkline
-  streak.svg  current and longest streak
-  langs.svg   top languages, by bytes and by repo count
-  year.svg    the year as a character map, in the portrait's own ramp
-
-Every file uses the portrait's grey ink, a monospace face, a transparent
-background, and the same left-to-right clipPath reveal with a cursor riding
-the edge. Motion is SMIL because GitHub strips <script> from READMEs.
-
-Env:
-  GITHUB_TOKEN  required
-  GH_LOGIN      user to summarise (default: Nyvo2010)
-  OUT_DIR       where to write (default: repository root)
 """
 import base64
 import functools
@@ -53,14 +38,12 @@ LIGHT = dict(data="#6e7681", emph="#424a53", dim="#8c959f",
              rule="#d8dee4", surface="#ffffff")
 DARK = dict(data="#c9d1d9", emph="#f0f6fc", dim="#8b949e",
             rule="#30363d", surface="#0d1117")
-MONO = ("JBMono,ui-monospace,SFMono-Regular,Menlo,Consolas,"
-        "'Liberation Mono',monospace")
+MONO = "ui-monospace,SFMono-Regular,Menlo,Consolas,monospace"
 FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 
 
 @functools.lru_cache(maxsize=None)
 def face(filename, weight):
-    """One @font-face rule with the subset inlined as a data URI."""
     font_path = os.path.join(FONT_DIR, filename)
     if not os.path.exists(font_path):
         return ""
@@ -72,15 +55,10 @@ def face(filename, weight):
 
 
 def font_text():
-    """Basic latin, both weights — for the data graphics."""
     f400 = face("jbmono-400.woff2", 400)
     f600 = face("jbmono-600.woff2", 600)
     return f400 + f600
 
-
-def font_head():
-    """Only the letters the section headings use."""
-    return face("jbmono-head.woff2", 600)
 
 WIDTH = 620
 LEFT = 34
@@ -132,7 +110,6 @@ def streaks(days):
                 best = dict(length=run, start=run_start, end=d["date"])
         else:
             run, run_start = 0, None
-
     cur = dict(length=0, start=None, end=None)
     tail = days[:-1] if days and days[-1]["contributionCount"] == 0 else days
     for d in reversed(tail):
@@ -154,10 +131,8 @@ def languages(repos):
         if edges:
             top = edges[0]["node"]["name"]
             by_repo[top] = by_repo.get(top, 0) + 1
-
     def rank(d):
         return sorted(d.items(), key=lambda kv: (-kv[1], kv[0]))[:5]
-
     return rank(by_size), rank(by_repo)
 
 
@@ -177,22 +152,21 @@ def summarise(user):
         by_size=by_size, by_repo=by_repo)
 
 
-def style(extra="", font=None):
+def style():
     def block(t):
         return (f".d-f{{fill:{t['data']}}}.d-s{{stroke:{t['data']}}}"
                 f".e-f{{fill:{t['emph']}}}.m-f{{fill:{t['dim']}}}"
                 f".u-s{{stroke:{t['rule']}}}.r{{stroke:{t['surface']}}}")
-    font_data = font or font_text()
-    return (f"<style>{font_data}"
-            f"{block(LIGHT)}.w{{fill:{LIGHT['data']};opacity:.13}}{extra}"
+    return (f"<style>{font_text()}"
+            f"{block(LIGHT)}.w{{fill:{LIGHT['data']};opacity:.13}}"
             f"@media(prefers-color-scheme:dark){{{block(DARK)}"
             f".w{{fill:{DARK['data']};opacity:.16}}}}</style>")
 
 
-def head(w, h, font=None):
+def head(w, h):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" '
             f'viewBox="0 0 {w} {h}" fill="none" font-family="{MONO}">'
-            + style(font=font))
+            + style())
 
 
 def fade(delay, dur=0.45):
@@ -243,7 +217,6 @@ def draw_stats(s):
                  + label(WIDTH, 30 + i * 40, val, 19, "e-f", "end",
                          ' font-weight="600"')
                  + label(WIDTH, 47 + i * 40, lab, 11, "m-f", "end") + '</g>')
-
     base, top = H - 10, H - 58
     span = base - top
     step = WIDTH / max(len(weekly) - 1, 1)
@@ -275,7 +248,6 @@ def draw_streak(s):
         span = (f"{pretty(r['start'])} - {pretty(r['end'])}"
                 if r["length"] else "--")
         cells.append((r["length"], lab, span))
-
     p = [head(WIDTH, H)]
     mid = WIDTH / 2
     p.append(f'<line x1="{mid:.0f}" y1="16" x2="{mid:.0f}" y2="80" '
@@ -295,7 +267,6 @@ def draw_langs(s):
     H = 26 + rows * 22 + 6
     colw = (WIDTH - LEFT - 30) / 2
     name_w, bar_max = 82, colw - 82 - 44
-
     p = [head(WIDTH, H)]
     groups = [(LEFT, "by bytes", s["by_size"], True),
               (LEFT + colw + 30, "by repos", s["by_repo"], False)]
@@ -326,32 +297,17 @@ def draw_langs(s):
     return "".join(p)
 
 
-def draw_heading(word):
-    FS = 16
-    H = 26
-    text_end = len(word) * FS * 0.6 + 18
-    p = [head(WIDTH, H, font=font_head())]
-    p.append(label(0, 18, word, FS, "e-f", extra=' font-weight="600"'))
-    p.append(f'<line x1="{text_end:.0f}" y1="12.5" x2="{WIDTH}" y2="12.5" '
-             f'class="u-s" stroke-width="1"/>')
-    p.append("</svg>")
-    return "".join(p)
-
-
 def draw_year(s):
     FS, LH, COLW = 9.2, 11.0, 2
     CW = FS * 0.6
     pad_l, pad_t = LEFT, 44
     weeks = s["weeks"]
-    ncols = len(weeks) * COLW
     H = int(pad_t + 7 * LH + 26)
-
     def level(v):
         for i, cut in enumerate((0, 2, 5, 9)):
             if v <= cut:
                 return i
         return 4
-
     p = [head(WIDTH, H)]
     p.append(f'<g opacity="0">{fade(0.10)}'
              + label(pad_l, 16, "THE YEAR", 9, "m-f",
@@ -359,14 +315,12 @@ def draw_year(s):
              + label(pad_l, 32, f"{s['active']} of "
                      f"{sum(len(w) for w in weeks)} days had a contribution", 11)
              + '</g>')
-
     lx = WIDTH - 6
     p.append(f'<g opacity="0">{fade(1.30)}'
              + label(lx - 78, 32, "less", 9, "m-f", "end")
              + f'<text xml:space="preserve" x="{lx - 72}" y="32" class="d-f" '
              f'font-size="{FS}">{" ".join(RAMP[1:])}</text>'
              + label(lx, 32, "more", 9, "m-f", "end") + '</g>')
-
     for r in range(7):
         chars = []
         for w in weeks:
@@ -388,11 +342,9 @@ def draw_year(s):
         p.append(f'<g clip-path="url(#{cid})"><text xml:space="preserve" '
                  f'x="{pad_l}" y="{y + FS - 0.6:.1f}" class="d-f" '
                  f'font-size="{FS}">{safe}</text></g>')
-
     for r, lab in ((1, "mon"), (3, "wed"), (5, "fri")):
         p.append(label(pad_l - 7, pad_t + r * LH + FS - 0.6, lab, 9, "m-f",
                        "end"))
-
     last_m, last_x = None, -999.0
     base_y = pad_t + 7 * LH + 13
     for i, w in enumerate(weeks):
@@ -402,7 +354,6 @@ def draw_year(s):
             p.append(label(x, base_y, MON[m - 1], 9, "m-f"))
             last_x = x
         last_m = m
-
     p.append("</svg>")
     return "".join(p)
 
@@ -425,20 +376,18 @@ def main():
         sys.exit("GITHUB_TOKEN is not set")
     login = os.environ.get("GH_LOGIN", "Nyvo2010")
     out_dir = os.environ.get("OUT_DIR", ".")
-
     s = summarise(fetch(login, token))
-    files = {"stats.svg": draw_stats(s), "streak.svg": draw_streak(s),
-             "langs.svg": draw_langs(s), "year.svg": draw_year(s)}
-    for word in ("about", "stack", "projects", "stats"):
-        files[f"hd-{word.replace(' ', '-')}.svg"] = draw_heading(word)
-
+    files = {
+        "stats.svg": draw_stats(s),
+        "streak.svg": draw_streak(s),
+        "langs.svg": draw_langs(s),
+        "year.svg": draw_year(s)
+    }
     changed = [n for n, svg in files.items()
                if write(os.path.join(out_dir, n), svg)]
     print(f"{s['total']} contributions, {s['active']} active days, "
           f"best week {s['best_week']}, current streak "
           f"{s['current']['length']}, longest {s['longest']['length']}")
-    print("languages by bytes: "
-          + ", ".join(f"{n} {v}" for n, v in s["by_size"]))
     print("updated: " + (", ".join(sorted(changed)) if changed else "nothing"))
 
 
