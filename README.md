@@ -1,20 +1,14 @@
 <div align="center">
 
-<img src="./ascii.svg" width="460" alt="Nyvo"/>
+# Hello, I'm Nyvo
 
-<img src="./stats.svg" width="620" alt="Contributions in the last year"/>
+High school student from the Netherlands building AI applications and designing for the web.
 
 [nyvo.is-a.dev](https://nyvo.is-a.dev) &nbsp;·&nbsp;
 [linkedin](https://www.linkedin.com/in/niek-vogelaar-271222392/) &nbsp;·&nbsp;
 [email](mailto:niek@nyvo.is-a.dev)
 
 </div>
-
-## About
-
-High school student from the Netherlands building AI applications and designing for the web.
-
-I build fast, test on real users, and kill what doesn't work.
 
 ## Tech Stack
 
@@ -35,10 +29,10 @@ AI backend service for intelligent systems.
 
 <div align="center">
 
-<img src="./streak.svg" width="620" alt="Current and longest streak"/>
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Nyvo2010&show_icons=true&theme=dark&border_radius=4&include_all_commits=true)
 
-<img src="./langs.svg" width="620" alt="Top languages by bytes and by repo"/>
+![GitHub Streak](https://streak-stats.demolab.com?user=Nyvo2010&theme=dark&border_radius=4)
 
-<img src="./year.svg" width="620" alt="The last year, one character per day"/>
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Nyvo2010&layout=compact&theme=dark&border_radius=4)
 
 </div>
