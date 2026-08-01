@@ -12,6 +12,8 @@ Outputs, all sharing one visual language with ascii.svg (the portrait):
 Every file uses the portrait's grey ink, a monospace face, a transparent
 background, and the same left-to-right clipPath reveal with a cursor riding
 the edge. Motion is SMIL because GitHub strips <script> from READMEs.
+Image URLs in README.md get a content-hash query param (`?v=…`) so GitHub's
+image cache never serves a stale frame.
 
 Env:
   GITHUB_TOKEN  required
@@ -20,8 +22,10 @@ Env:
 """
 import base64
 import functools
+import hashlib
 import json
 import os
+import re
 import sys
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
@@ -74,10 +78,6 @@ def font_text():
     f400 = face("jbmono-400.woff2", 400)
     f600 = face("jbmono-600.woff2", 600)
     return f400 + f600
-
-
-def font_head():
-    return face("jbmono-head.woff2", 600)
 
 WIDTH = 620
 LEFT = 34
@@ -243,10 +243,10 @@ def draw_stats(s):
     clip, cursor = wipe("rs", 0, top - 6, WIDTH, span + 8, 0.50)
     p.append(clip)
     p.append('<g clip-path="url(#rs)">')
-    p.append(f'<path d="M{pts[0][0]:.1f} {base:.1f}"' +
+    p.append(f'<path d="M{pts[0][0]:.1f} {base:.1f}' +
              "".join(f'L{x:.1f} {y:.1f}' for x, y in pts) +
              f'L{pts[-1][0]:.1f} {base:.1f}Z" class="w"/>')
-    p.append(f'<path d="M{pts[0][0]:.1f} {pts[0][1]:.1f}"' +
+    p.append(f'<path d="M{pts[0][0]:.1f} {pts[0][1]:.1f}' +
              "".join(f'L{x:.1f} {y:.1f}' for x, y in pts[1:]) +
              f'" class="d-s" stroke-width="2" stroke-linejoin="round" '
              f'stroke-linecap="round"/>')
@@ -312,18 +312,6 @@ def draw_langs(s):
                      hbar(gx + name_w, y, bar_max * val / top, 7) +
                      '</g>')
         p.append(cursor)
-    p.append("</svg>")
-    return "".join(p)
-
-
-def draw_heading(word):
-    FS = 16
-    H = 26
-    text_end = len(word) * FS * 0.6 + 18
-    p = [head(WIDTH, H, font=font_head())]
-    p.append(label(0, 18, word, FS, "e-f", extra=' font-weight="600"'))
-    p.append(f'<line x1="{text_end:.0f}" y1="12.5" x2="{WIDTH}" y2="12.5" '
-             f'class="u-s" stroke-width="1"/>')
     p.append("</svg>")
     return "".join(p)
 
@@ -401,6 +389,36 @@ def write(path, svg):
     return True
 
 
+def stamp_readme(out_dir):
+    """Cache-bust the README's image URLs so GitHub's camo proxy never
+    serves a stale frame: `src="./stats.svg"` becomes
+    `src="./stats.svg?v=<sha256 of the file>` — a new URL whenever the
+    content changes, the same URL when it doesn't.
+    """
+    readme = os.path.join(out_dir, "README.md")
+    if not os.path.exists(readme):
+        return False
+    with open(readme, encoding="utf-8") as f:
+        text = f.read()
+
+    def stamp(m):
+        name = m.group(1)
+        path = os.path.join(out_dir, name)
+        if not os.path.exists(path):
+            return m.group(0)
+        with open(path, "rb") as f:
+            digest = hashlib.sha256(f.read()).hexdigest()[:10]
+        return f'src="./{name}?v={digest}"'
+
+    new = re.sub(r'src="\./([a-z0-9-]+\.svg)(?:\?v=[0-9a-f]{10})?"',
+                 stamp, text)
+    if new == text:
+        return False
+    with open(readme, "w", encoding="utf-8") as f:
+        f.write(new)
+    return True
+
+
 def main():
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
@@ -410,10 +428,10 @@ def main():
     s = summarise(fetch(login, token))
     files = {"stats.svg": draw_stats(s), "streak.svg": draw_streak(s),
              "langs.svg": draw_langs(s), "year.svg": draw_year(s)}
-    for word in ("about", "stack", "projects", "stats", "about this page"):
-        files[f"hd-{word.replace(' ', '-')}.svg"] = draw_heading(word)
     changed = [n for n, svg in files.items()
                if write(os.path.join(out_dir, n), svg)]
+    if stamp_readme(out_dir):
+        changed.append("README.md")
     print(f"{s['total']} contributions, {s['active']} active days, "
           f"best week {s['best_week']}, current streak "
           f"{s['current']['length']}, longest {s['longest']['length']}")
