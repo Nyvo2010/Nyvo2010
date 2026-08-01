@@ -10,17 +10,17 @@
 
 </div>
 
-<img src="./hd-about.svg" width="620" alt="about"/>
+## About
 
-> High school student from the Netherlands building AI applications and designing for the web.
+High school student from the Netherlands building AI applications and designing for the web.
 
 I build fast, test on real users, and kill what doesn't work.
 
-<img src="./hd-stack.svg" width="620" alt="stack"/>
+## Tech Stack
 
 <samp>python &nbsp; typescript &nbsp; javascript &nbsp; react &nbsp; html5 &nbsp; css3 &nbsp; vscode &nbsp; git &nbsp; github &nbsp; opencode</samp>
 
-<img src="./hd-projects.svg" width="620" alt="projects"/>
+## Projects
 
 **[Portfolio](https://github.com/Nyvo2010/Portfolio)** &nbsp;·&nbsp; <samp>typescript, react</samp><br>
 My personal portfolio website showcasing my projects and skills.
@@ -31,7 +31,7 @@ Autonomous AI agent for various tasks.
 **[Alto-AI-Backend](https://github.com/Nyvo2010/Alto-AI-Backend)** &nbsp;·&nbsp; <samp>python</samp><br>
 AI backend service for intelligent systems.
 
-<img src="./hd-stats.svg" width="620" alt="stats"/>
+## Stats
 
 <div align="center">
 
