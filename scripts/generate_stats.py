@@ -60,7 +60,11 @@ FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 
 @functools.lru_cache(maxsize=None)
 def face(filename, weight):
-    with open(os.path.join(FONT_DIR, filename), "rb") as f:
+    """One @font-face rule with the subset inlined as a data URI."""
+    font_path = os.path.join(FONT_DIR, filename)
+    if not os.path.exists(font_path):
+        return ""
+    with open(font_path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode("ascii")
     return (f"@font-face{{font-family:JBMono;font-style:normal;"
             f"font-weight:{weight};font-display:block;"
@@ -68,10 +72,14 @@ def face(filename, weight):
 
 
 def font_text():
-    return face("jbmono-400.woff2", 400) + face("jbmono-600.woff2", 600)
+    """Basic latin, both weights — for the data graphics."""
+    f400 = face("jbmono-400.woff2", 400)
+    f600 = face("jbmono-600.woff2", 600)
+    return f400 + f600
 
 
 def font_head():
+    """Only the letters the section headings use."""
     return face("jbmono-head.woff2", 600)
 
 WIDTH = 620
@@ -174,7 +182,8 @@ def style(extra="", font=None):
         return (f".d-f{{fill:{t['data']}}}.d-s{{stroke:{t['data']}}}"
                 f".e-f{{fill:{t['emph']}}}.m-f{{fill:{t['dim']}}}"
                 f".u-s{{stroke:{t['rule']}}}.r{{stroke:{t['surface']}}}")
-    return (f"<style>{font or font_text()}"
+    font_data = font or font_text()
+    return (f"<style>{font_data}"
             f"{block(LIGHT)}.w{{fill:{LIGHT['data']};opacity:.13}}{extra}"
             f"@media(prefers-color-scheme:dark){{{block(DARK)}"
             f".w{{fill:{DARK['data']};opacity:.16}}}}</style>")
@@ -420,7 +429,7 @@ def main():
     s = summarise(fetch(login, token))
     files = {"stats.svg": draw_stats(s), "streak.svg": draw_streak(s),
              "langs.svg": draw_langs(s), "year.svg": draw_year(s)}
-    for word in ("about", "stack", "projects", "stats", "about this page"):
+    for word in ("about", "stack", "projects", "stats"):
         files[f"hd-{word.replace(' ', '-')}.svg"] = draw_heading(word)
 
     changed = [n for n, svg in files.items()
