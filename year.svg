@@ -1,3 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="620" height="100" viewBox="0 0 620 100">
-<text x="310" y="50" text-anchor="middle" font-family="monospace" font-size="14" fill="#6e7681">Generating...</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="200" viewBox="0 0 620 200">
+<style>
+  .d{fill:#6e7681}.e{fill:#424a53}.m{fill:#8c959f}.u{stroke:#d8dee4}.r{stroke:#ffffff}
+  @media(prefers-color-scheme:dark){.d{fill:#c9d1d9}.e{fill:#f0f6fc}.m{fill:#8b949e}.u{stroke:#30363d}.r{stroke:#0d1117}}
+</style>
+<text x="310" y="50" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14" class="d">Year contributions loading...</text>
+<text x="310" y="70" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" class="m">Run workflow to generate</text>
 </svg>
