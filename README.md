@@ -1,10 +1,8 @@
-<div align="center">
-
-<img src="./ascii.svg" width="460" alt="Nyvo"/>
+<img src="./ascii.svg" width="100%" alt="Nyvo"/>
 
 <br><br>
 
-<img src="./stats.svg" width="620" alt="Contributions in the last year"/>
+<img src="./stats.svg" width="100%" alt="Contributions in the last year"/>
 
 <br><br>
 
@@ -12,25 +10,17 @@
 [linkedin](https://www.linkedin.com/in/niek-vogelaar-271222392/) &nbsp;·&nbsp;
 [email](mailto:niek@nyvo.is-a.dev)
 
-</div>
+<br><br>
+
+<img src="./hd-stack.svg" width="100%" alt="stack"/>
 
 <br>
 
-<div align="center">
-<img src="./hd-stack.svg" width="620" alt="stack"/>
-</div>
-
-<br>
-
-<div align="center">
 <samp>python &nbsp; typescript &nbsp; javascript &nbsp; react &nbsp; html5 &nbsp; css3 &nbsp; vscode &nbsp; git &nbsp; github &nbsp; opencode</samp>
-</div>
 
 <br><br>
 
-<div align="center">
-<img src="./hd-projects.svg" width="620" alt="projects"/>
-</div>
+<img src="./hd-projects.svg" width="100%" alt="projects"/>
 
 <br>
 
@@ -49,18 +39,16 @@ AI backend service for intelligent systems.
 
 <br><br>
 
-<div align="center">
-<img src="./hd-stats.svg" width="620" alt="stats"/>
+<img src="./hd-stats.svg" width="100%" alt="stats"/>
 
 <br>
 
-<img src="./streak.svg" width="620" alt="Current and longest streak"/>
+<img src="./streak.svg" width="100%" alt="Current and longest streak"/>
 
 <br>
 
-<img src="./langs.svg" width="620" alt="Top languages by bytes and by repo"/>
+<img src="./langs.svg" width="100%" alt="Top languages by bytes and by repo"/>
 
 <br>
 
-<img src="./year.svg" width="620" alt="The last year, one character per day"/>
-</div>
+<img src="./year.svg" width="100%" alt="The last year, one character per day"/>
