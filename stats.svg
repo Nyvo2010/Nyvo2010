@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="150" viewBox="0 0 620 150">
+<style>
+  .d-f{fill:#6e7681}.d-s{stroke:#6e7681}.e-f{fill:#424a53}.m-f{fill:#8c959f}.u-s{stroke:#d8dee4}.r{stroke:#ffffff}
+  .w{fill:#6e7681;opacity:.13}@media(prefers-color-scheme:dark){.d-f{fill:#c9d1d9}.d-s{stroke:#c9d1d9}.e-f{fill:#f0f6fc}.m-f{fill:#8b949e}.u-s{stroke:#30363d}.r{stroke:#0d1117}.w{fill:#c9d1d9;opacity:.16}}
+</style>
+<text x="310" y="50" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14" class="d-f">Loading contributions...</text>
+</svg>
