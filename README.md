@@ -1,8 +1,8 @@
-<img src="./ascii.svg" width="100%" alt="Nyvo"/>
+<img src="https://raw.githubusercontent.com/Nyvo2010/Nyvo2010/main/ascii.svg" width="72%" alt="Nyvo"/>
 
 <br><br>
 
-<img src="./stats.svg" width="100%" alt="Contributions in the last year"/>
+<img src="https://raw.githubusercontent.com/Nyvo2010/Nyvo2010/main/stats.svg" width="100%" alt="Contributions in the last year"/>
 
 <br><br>
 
