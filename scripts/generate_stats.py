@@ -7,6 +7,7 @@ import base64
 import functools
 import json
 import os
+import re
 import sys
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -70,10 +71,14 @@ REVEAL = 1.30
 RAMP = [" ", ":", "+", "#", "@"]
 MON = ["jan", "feb", "mar", "apr", "may", "jun",
        "jul", "aug", "sep", "oct", "nov", "dec"]
+XML_INVALID_CHAR_RE = re.compile(
+    r"[^\u0009\u000A\u000D\u0020-\uD7FF\uE000-\uFFFD]"
+)
 
 
 def xml_text(s: str) -> str:
-    return escape(s, {'"': '&quot;', "'": '&apos;'})
+    cleaned = XML_INVALID_CHAR_RE.sub("", str(s))
+    return escape(cleaned, {'"': '&quot;', "'": '&apos;'})
 
 
 def window():

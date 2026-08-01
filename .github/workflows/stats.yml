@@ -32,10 +32,20 @@ jobs:
           cd ${{ github.workspace }}
           python3 scripts/generate_stats.py
 
+      - name: Validate generated SVG XML
+        run: |
+          cd ${{ github.workspace }}
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          for path in ("stats.svg", "streak.svg", "langs.svg", "year.svg"):
+              ET.parse(path)
+              print(f"OK {path}")
+          PY
+
       - name: Commit whatever changed
         run: |
           cd ${{ github.workspace }}
-          FILES="stats.svg streak.svg langs.svg year.svg hd-*.svg"
+          FILES="stats.svg streak.svg langs.svg year.svg"
           if [ -z "$(git status --porcelain -- $FILES)" ]; then
             echo "no change"
             exit 0
