@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="40" viewBox="0 0 620 40">
+<style>
+  .d-f{fill:#6e7681}.e-f{fill:#424a53}.m-f{fill:#8c959f}.u-s{stroke:#d8dee4}
+  @media(prefers-color-scheme:dark){.d-f{fill:#c9d1d9}.e-f{fill:#f0f6fc}.m-f{fill:#8b949e}.u-s{stroke:#30363d}}
+</style>
+<text x="0" y="25" font-family="JBMono,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="16" class="e-f" font-weight="600">about</text>
+<line x1="60" y1="12.5" x2="620" y2="12.5" class="u-s" stroke-width="1"/>
+</svg>
