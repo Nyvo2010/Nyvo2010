@@ -42,23 +42,3 @@ AI backend service for intelligent systems.
 <img src="./year.svg" width="620" alt="The last year, one character per day"/>
 
 </div>
-
-<img src="./hd-about-this-page.svg" width="620" alt="about this page"/>
-
-Every graphic here is generated inside this repository by a scheduled action.
-The whole page makes **zero** third-party requests — no external services that
-can rate-limit or go dark.
-
-`ascii.svg` is a photo pushed through a character ramp (run `scripts/make_portrait.py`
-once to create yours); the stat graphics and these section headings are drawn by
-a [scheduled action](.github/workflows/stats.yml) straight from the GitHub GraphQL
-API, once a day, committing only what changed.
-
-They animate with SMIL inside the SVG, because GitHub strips `<script>` from
-READMEs. The headings are SVGs for the same reason: GitHub also strips CSS, so
-an image is the only way to put this page's own typeface on them.
-
-The typeface is [JetBrains Mono](scripts/fonts), subset to just the characters
-each graphic draws and inlined as base64. Language totals cover public
-repositories only. `year.svg` uses the portrait's character ramp: ` ` `:` `+` `#` `@`,
-quiet to loud.
