@@ -24,25 +24,6 @@
 
 <br><br>
 
-<img src="./hd-projects.svg" width="100%" alt="projects"/>
-
-<br>
-
-**[Portfolio](https://github.com/Nyvo2010/Portfolio)** &nbsp;·&nbsp; <samp>typescript, react</samp><br>
-My personal portfolio website showcasing my projects and skills.
-
-<br>
-
-**[Butterfly-Agent](https://github.com/Nyvo2010/Butterfly-Agent)** &nbsp;·&nbsp; <samp>typescript</samp><br>
-Autonomous AI agent for various tasks.
-
-<br>
-
-**[Alto-AI-Backend](https://github.com/Nyvo2010/Alto-AI-Backend)** &nbsp;·&nbsp; <samp>python</samp><br>
-AI backend service for intelligent systems.
-
-<br><br>
-
 <img src="./hd-stats.svg" width="100%" alt="stats"/>
 
 <br>
